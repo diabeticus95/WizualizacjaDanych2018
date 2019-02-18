@@ -1,4 +1,5 @@
 library(ggplot2)
+install.packages("SmarterPoland")
 library(SmarterPoland)
 library(dplyr)
 
@@ -56,7 +57,7 @@ p1 <- ggplot(data = countries, aes(x = death.rate, fill = continent)) +
 
 p2 <- ggplot(countries, aes(x = continent, y = death.rate)) +
   geom_violin()
-
+install.packages("gridExtra")
 library(gridExtra)
 grid.arrange(p1, p2, nrow = 1)
 
@@ -94,7 +95,7 @@ ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, color 
 ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, color = n.countries)) +
   geom_point() +
   scale_size_continuous(range = c(4, 12)) +
-  scale_x_continuous("Birth rate", expand = c(0.2, 0.2))
+  scale_x_continuous("Birth rate", expand = c(1, 1))
 
 # geometrie automatycznie wykorzystują okreslone atrybuty graficzne.
 # w tym przypadku atrybut size automatycznie jest przypisany zarowno do geom_point i geom_text
@@ -104,17 +105,18 @@ ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, label 
 
 ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, label = continent)) +
   geom_point() +
-  geom_text(vjust = -1, size = 5)
+  geom_text(vjust = 3, size = 5)
 
 # wiele uzytecznych geometrii mozna znalezc w pakietach rzoszerzajacych ggplot2
 library(ggrepel)
+install.packages("ggrepel")
 ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, label = continent)) +
   geom_point() +
   geom_text_repel(size = 5, force = 1)
 
 ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, label = continent)) +
   geom_point() +
-  geom_label_repel(size = 5, force = 1)
+  geom_label_repel(size = 5, force = 9000000000)
 
 ggplot(continents, aes(x = birth.rate, y = death.rate, size = population, label = continent, 
                        color = n.countries)) +
@@ -176,7 +178,7 @@ ggplot(countries, aes(x = birth.rate, y = death.rate)) +
 ggplot(countries, aes(x = birth.rate, y = death.rate)) +
   stat_density2d(aes(fill = ..level..), color = "black", contour = TRUE, geom = "polygon") +
   facet_wrap(~ continent) +
-  scale_fill_gradient(low = "navyblue", high = "red")
+  scale_fill_gradient(low = "green", high = "red")
 
 # wykresy zyskuja poprzez pokazanie linii trendu
 
@@ -210,6 +212,21 @@ mieszkania <- read.csv(file = "https://raw.githubusercontent.com/STWUR/STWUR-201
 
 # I. Na jednym wykresie przedstaw rozklad cen i wieku mieszkan dla a) calego Wroclawia b) 
 # poszczegolnych dzielnic.
+
+#a)
+mieszkania_cena <- mieszkania %>% 
+  mutate(cena = cena_m2 * metraz)
+ 
+ggplot(data = na.omit(mieszkania_cena) ,aes(x = rok, y = cena)) +
+  geom_smooth()
+
+#b)
+  #group_by(dzielnica) %>%
+  ggplot(data = na.omit(mieszkania_cena)%>% filter(dzielnica != "Brak") ,aes(x = rok, y = cena)) +
+  geom_smooth() +
+  facet_wrap(~dzielnica)
+
+
 # II. Przedstaw zaleznosc ceny za metr^2 od dzielnicy, pietra i roku zbudowania mieszkania.
 
 # ad. II
