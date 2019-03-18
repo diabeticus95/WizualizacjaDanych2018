@@ -20,7 +20,7 @@ mini_mini <- mini %>%
   image_scale("140") %>% 
   image_border("grey", "50x50") %>%
   image_annotate("MiNI", color = "black", size = 40, 
-                 location = "+0+10", gravity = "north")
+                 location = "+0+100", gravity = "north")
 
 p + annotation_raster(as.raster(mini_mini), 0.75, 1.25, 400, 800)
 
@@ -75,7 +75,7 @@ p3 <- ggplot(data = countries, aes(x = continent, fill = continent)) +
 
 
 cairo_ps("learning-inkscape.eps", height = 7.5, width = 8)
-((p1 + p2) / p3) * theme_bw() * theme(legend.background = element_rect(fill = "green"))
+p3 + theme(legend.background = element_rect(fill = "green"))
 dev.off()
 
 # alternatywa: eksport do svg pakietem gridSVG
